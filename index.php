@@ -24,20 +24,68 @@ Nome do comprador (primeiro-nome, sobrenome)
 Descrição do pagamento.
 Valor da compra.
 (Padrão: Chave pix do estabelecimento, nome da loja do estabelecimento)
- */
+ 
+----------- METODO 2
 
-require __DIR__.'/vendor/autoload.php';
+$result = $post->read();
+$num = $resultado->rowCount();
+
+if($num > 0){
+    $post_arr = array();
+    $post_arr['data'] = array();
+
+    while($row = $resultado->fetch(PDO::FETCH_ASSOC)){
+        extract($row);
+        $post_item = array(
+            'teste' => $recebendoteste,
+            'teste2' => $recebendoteste2
+        );
+        array_push($post_arr['data'], $post_item);
+    }
+    //converter JSON para uma saida
+    echo json_encode($post_arr);
+}
+else{
+    echo json_encode(array('message' => 'Erro, nenhum post achado'));
+}
+//echo '<prev>' .print_r($mostrar,true). '</prev>';
+*/
+
+
+/*function display_array_recursive($json_rec){
+    if($json_rec){
+        foreach($json_rec as $key=> $value){
+            if(is_array($value)){
+                display_array_recursive($value);
+            }else{
+                echo "life is like a mf dream";
+            }
+        }
+    }
+}*/
+
+function display_array_recursive($json_rec){
+    header ("Content-Type: application/json; charset=UTF-8");
+    if($json_rec){
+        foreach($json_rec as $key=> $value){
+            if(is_array($value)){
+                display_array_recursive($value);
+            }else{           
+                    $chaves = "-".$value;
+                    $separador = explode("-", $chaves);
+                    echo $chaves[0];
+                }
+        }	
+    }	
+}
+
+    $resposta = file_get_contents('php://input');
+
+    $json_array=json_decode($resposta,true);
+    display_array_recursive($json_array);
 
 use \App\Pix\Payload;
-
-$conteudo = json_decode(file_get_contents('php://input'), true);
-
-$mostrar = json_encode($conteudo);
-//$teste1 = $conteudo["teste1"];
-//$teste2 = $conteudo["teste1"];
-
-echo '<prev>' .print_r($mostrar,true). '</prev>';
-
+require __DIR__.'/vendor/autoload.php';
 $obPayload = (new Payload)->setPixKey('elielnp@outlook.com')
                           ->setDescription('Teste de geramento QR Code por Pix')
                           ->setMerchantName('Delfos')
