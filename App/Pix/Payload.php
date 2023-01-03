@@ -1,8 +1,4 @@
 <?php
-/*
-    -- Ass: Eliel
-    Ainda em fase de testes, Estou pesquisando maneiras de resgatar o valor diretamente do BotConversa, caso não de, usaremos o integromat para intermediar.
-*/
 
 namespace App\Pix;
 
